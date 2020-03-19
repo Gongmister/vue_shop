@@ -17,18 +17,18 @@ const router = new Router({
     }
   ]
 })
-router.beforeEach((to, from, next) =>{
+router.beforeEach((to, from, next) => {
   const userInfo = window.sessionStorage.getItem('token')
   if (to.path !== '/login') {
     if (!userInfo) {
-      next({name: 'login'})
-    }else{
+      next({ name: 'login' })
+    } else {
       next()
     }
-  }else{
+  } else {
     if (userInfo) {
       next(false)
-    }else{
+    } else {
       next()
     }
   }

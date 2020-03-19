@@ -29,5 +29,9 @@ export default {
 <style lang="less" scoped>
 .el-container{
     height: 100%;
+    .el-header{
+      line-height: 60px;
+      background: #373d41;
+    }
 }
 </style>
