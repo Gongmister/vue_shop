@@ -7,8 +7,15 @@ const router = new Router({
   routes: [
     {
       path: '/home',
-      name: '/home',
-      component: () => import('@/views/layout')
+      name: 'home',
+      component: () => import('@/views/layout'),
+      children: [
+        {
+          path: '/users',
+          name: 'users',
+          component: () => import('@/views/users')
+        }
+      ]
     },
     {
       path: '/login',

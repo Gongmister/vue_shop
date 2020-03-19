@@ -33,5 +33,8 @@ export default {
       line-height: 60px;
       background: #373d41;
     }
+    .el-main{
+      background: #ccc;
+    }
 }
 </style>
