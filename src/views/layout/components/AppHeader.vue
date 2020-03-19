@@ -6,7 +6,7 @@
     </el-col>
   <el-col :span="1" :offset="19">
     <div class="grid-content bg-purple">
-      <el-button>退出</el-button>
+      <el-button @click="signOut">退出</el-button>
       </div>
       </el-col>
 </el-row>
@@ -15,6 +15,27 @@
 export default {
   data () {
     return {}
+  },
+  methods: {
+    signOut () {
+      this.$confirm('是否要退出登录?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '退出成功!'
+        })
+        window.sessionStorage.clear()
+        this.$router.push('login')
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消退出'
+        })
+      })
+    }
   }
 }
 </script>
