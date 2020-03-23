@@ -85,13 +85,13 @@ export default {
     capitalize: function (value) {
       const date = new Date(value)
       const y = date.getFullYear(value)
-      const m = date.getMonth(value)+1
+      const m = date.getMonth(value) + 1
       const d = date.getDate(value)
       const h = date.getHours(value)
       const mi = date.getMinutes(value)
       const s = date.getSeconds(value)
       return `${y}-${m}-${d} ${h}:${mi}:${s}`
-  }
+    }
   },
   methods: {
     getOrder () {
