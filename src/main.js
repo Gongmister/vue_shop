@@ -5,8 +5,10 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './styles/index.css'
 import axios from 'axios'
+import ZkTable from 'vue-table-with-tree-grid'
 
 Vue.use(ElementUI)
+Vue.use(ZkTable)
 axios.defaults.baseURL = 'https://www.liulongbin.top:8888/api/private/v1/'
 axios.interceptors.request.use(config => {
   config.headers.Authorization = window.sessionStorage.getItem('token')
