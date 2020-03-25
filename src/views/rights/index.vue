@@ -51,7 +51,6 @@ export default {
         method: 'get',
         url: 'rights/list'
       }).then(res => {
-        console.log(res.data.data)
         this.jurList = res.data.data
       })
     }

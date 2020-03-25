@@ -6,7 +6,7 @@
             <el-breadcrumb-item>商品分类</el-breadcrumb-item>
         </el-breadcrumb>
         <el-card>
-            <el-button>添加分类</el-button>
+            <el-button type="primary" @click="addClass">添加分类</el-button>
             <zk-table
       ref="table"
       sum-text="sum"
@@ -37,6 +37,44 @@
           <el-button type="danger" icon="el-icon-delete" size="mini"  @click="deleteTable(scope.row.cat_id)">删除</el-button>
       </template>
     </zk-table>
+    <el-dialog
+        title="修改分类"
+        :visible.sync="dialogVisible"
+        width="30%"
+        :before-close="handleClose">
+        <el-form :model="cateList" label-width="80px">
+  <el-form-item label="分类名称">
+    <el-input v-model="cateList.cat_name"></el-input>
+  </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="determineCate">确 定</el-button>
+  </span>
+</el-dialog>
+<el-dialog
+        title="添加分类"
+        :visible.sync="btVisible"
+        width="30%"
+        :before-close="handleClose">
+        <el-form label-width="80px">
+          <el-form-item label="分类名称">
+            <el-input v-model="cateList.cat_name"></el-input>
+          </el-form-item>
+          <el-form-item label="分类名称">
+             <el-cascader
+                    expand-trigger="hover"
+                    v-model="selectedCate"
+                    :options="categoriesList"
+                    :props="cateProps"
+                    @change="handleChange"></el-cascader>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="btVisible = false">取 消</el-button>
+            <el-button type="primary" @click="addHandClass">确 定</el-button>
+  </span>
+</el-dialog>
         </el-card>
     </div>
 </template>
@@ -44,7 +82,6 @@
 export default {
   data () {
     return {
-      categoriesList: [],
       columns: [
         {
           label: '分类名称',
@@ -71,7 +108,17 @@ export default {
           type: 'template',
           template: 'likes'
         }
-      ]
+      ],
+      categoriesList: [],
+      cateProps: {
+        value: 'cat_id',
+        label: 'cat_name',
+        children: 'children'
+      },
+      selectedCate: [],
+      dialogVisible: false,
+      cateList: {},
+      btVisible: false
     }
   },
   created () {
@@ -83,15 +130,79 @@ export default {
         method: 'get',
         url: 'categories'
       }).then(res => {
-        console.log(res.data.data)
         this.categoriesList = res.data.data
+        console.log(this.categoriesList)
       })
     },
     editTable (id) {
-      console.log(id)
+      this.dialogVisible = true
+      this.className(id)
+    },
+    className () {
+      this.$http({
+        method: 'get',
+        url: 'categories/' + this.categoriesList.cat_id
+      }).then(res => {
+        this.cateList = res.data.data
+      })
     },
     deleteTable (id) {
-      console.log(id)
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+        this.$http({
+          method: 'delete',
+          url: 'categories/' + id
+        }).then(res => {
+          console.log(res)
+          this.getCategories()
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    handleClose (done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done()
+        })
+        .catch(_ => {})
+    },
+    determineCate () {
+      this.$http({
+        method: 'put',
+        url: 'categories/' + this.cateList.cat_id,
+        params: this.cateList.cat_name
+      }).then(res => {
+        console.log(res)
+      })
+      this.dialogVisible = false
+      this.getCategories()
+    },
+    addClass () {
+      this.btVisible = true
+    },
+    handleChange (value) {
+      console.log(value)
+    },
+    addHandClass () {
+      console.log(this.categoriesList)
+      this.$http({
+        method: 'post',
+        url: 'categories',
+        data: this.selectedCate
+      }).then(res => {
+        console.log(res)
+      })
     }
   }
 }

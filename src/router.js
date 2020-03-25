@@ -44,6 +44,11 @@ const router = new Router({
           path: '/categories',
           name: 'categories',
           component: () => import('@/views/categories')
+        },
+        {
+          path: '/params',
+          name: 'params',
+          component: () => import('@/views/params')
         }
       ]
     },
